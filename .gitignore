@@ -1,0 +1,4 @@
+/vendor/
+/DataLibrary/DataAccess/DatabaseAuth.php
+/DataLibrary/DataAccess/DatabaseAuthLocal.php
+/Forgein/

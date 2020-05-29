@@ -1,0 +1,13 @@
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  #order deny,allow
+  #deny from all
+  #allow from 85.221.137.218
+
+  RedirectMatch ^/gr4/$ /gr4/index
+
+
+  # no, so we redirect to our front web controller
+  RewriteCond %{REQUEST_FILENAME} !-f
+  RewriteRule ^(.*)$ index.php [QSA,L]
+</IfModule>
