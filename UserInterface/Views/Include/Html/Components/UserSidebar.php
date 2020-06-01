@@ -43,6 +43,23 @@
                             class="fas fa-long-arrow-alt-right"></i> Na rachunek obcy</a>
                 <a class="collapse-item" href="/gr4/dashboard/selfTransfer"><i class="fas fa-long-arrow-alt-left"></i>
                     Na rachunek własny</a>
+                <h6 class="collapse-header">Inne</h6>
+                <a class="collapse-item" href="/gr4/dashboard/transferBasket"><i class="fas fa-shopping-basket"></i>
+                    Koszyk
+                    <?php use DataLibrary\Helpers;
+                    use DataLibrary\ProductsProcessor;
+
+                    $userToken = Helpers::getValueFromSession('userToken');
+
+                    if ($userToken):
+                    $transNumber = ProductsProcessor::getNumberOfTransactionsInBasket($userToken);
+                    if ($transNumber > 0): ?>
+                    <span class="badge badge-danger badge-counter">
+                        <?php echo $transNumber < 10 ? $transNumber : '9+' ?>
+                    </span></a>
+                <?php endif; else: ?>
+                    </a>
+                <?php endif; ?>
             </div>
         </div>
     </li>

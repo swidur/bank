@@ -6,27 +6,34 @@ use DataLibrary\UserProcessor;
 use UserInterface\AddressModel;
 use UserInterface\ChangePasswordController;
 use UserInterface\IdDocumentModel;
+use UserInterface\ListWrapper;
 use UserInterface\LoginController;
+use UserInterface\ProductsController;
+use UserInterface\ProductsView;
+use UserInterface\RedirectPageModel;
+use UserInterface\RedirectPageView;
+use UserInterface\RegisterController;
 use UserInterface\RegisterDetailsController;
 use UserInterface\RegisterDetailsView;
 use UserInterface\SendRecoverPasswordController;
-use UserInterface\RegisterController;
-use UserInterface\RedirectPageView;
+use UserInterface\UserModel;
 use UserInterface\WithFootView;
 use UserInterface\WithNavFootView;
-use UserInterface\UserModel;
-use UserInterface\RedirectPageModel;
 
 require_once 'UserInterface/Models/RedirectPageModel.php';
 require_once 'UserInterface/Models/UserModel.php';
 require_once 'UserInterface/Models/AddressModel.php';
 require_once 'UserInterface/Models/IdDocumentModel.php';
+require_once 'UserInterface/Models/AccountModel.php';
+require_once 'UserInterface/Models/CardModel.php';
+require_once 'UserInterface/Models/ListWrapper.php';
 
 require_once 'UserInterface/Controllers/RegisterController.php';
 require_once 'UserInterface/Controllers/RegisterDetailsController.php';
 require_once 'UserInterface/Controllers/SendRecoverPasswordController.php';
 require_once 'UserInterface/Controllers/LoginController.php';
 require_once 'UserInterface/Controllers/ChangePasswordController.php';
+require_once 'UserInterface/Controllers/ProductsController.php';
 
 require_once 'DataLibrary/BusinessLogic/RegisterProcessor.php';
 require_once 'DataLibrary/BusinessLogic/UserProcessor.php';
@@ -37,6 +44,7 @@ require_once 'UserInterface/Views/RedirectPageView.php';
 require_once 'UserInterface/Views/WithFootView.php';
 require_once 'UserInterface/Views/WithNavFootView.php';
 require_once 'UserInterface/Views/RegisterDetailsView.php';
+require_once 'UserInterface/Views/ProductsView.php';
 
 
 function goHome()
@@ -101,8 +109,10 @@ function logout($type)
     session_start();
     session_destroy();
     if ($type === 'normal') {
+        $_GET['r'] = '30';
         redirect('loggedout');
     } elseif ($type == 'inactivity') {
+        $_GET['r'] = '30';
         redirect('inactivitylogout');
     }
 }
@@ -286,4 +296,36 @@ function history()
     $view = new WithFootView($userModel);
     $view->setPagePath('UserInterface/Views/Include/Html/HistoryTemplate.php');
     $view->echoBody();
+}
+
+function products($pageType)
+{
+    $listCheckingAccounts = new ListWrapper();
+    $listSavingsAccounts = new ListWrapper();
+    $listCards = new ListWrapper();
+    $listConsumerLoans = new ListWrapper();
+    $listMortgageLoans = new ListWrapper();
+
+    $view = new ProductsView($listCheckingAccounts, $listSavingsAccounts, $listCards, $listConsumerLoans, $listMortgageLoans);
+    $controller = new ProductsController($view, $listCheckingAccounts, $listSavingsAccounts, $listCards, $listConsumerLoans, $listMortgageLoans);
+
+    switch ($pageType) {
+        case 'all':
+            $view->setPagePath('UserInterface/Views/Include/Html/ProductsAllTemplate.php');
+            $controller->showAllProducts();
+            break;
+        case 'savings':
+            $view->setPagePath('UserInterface/Views/Include/Html/ProductsSavingsTemplate.php');
+            $controller->showSavingsProducts();
+            break;
+        case 'cards':
+            $view->setPagePath('UserInterface/Views/Include/Html/ProductsCardsTemplate.php');
+            $controller->showCardProducts();
+            break;
+        case 'loans':
+            $view->setPagePath('UserInterface/Views/Include/Html/ProductsLoansTemplate.php');
+            $controller->showLoanProducts();
+            break;
+    }
+
 }

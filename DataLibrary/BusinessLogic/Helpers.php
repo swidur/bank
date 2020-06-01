@@ -75,6 +75,20 @@ class Helpers
         session_write_close();
     }
 
+
+    public static function getValueFromSession($fieldName)
+    {
+        if (session_status() == PHP_SESSION_NONE) {
+            session_start();
+        }
+        if (isset($_SESSION[$fieldName])) {
+            return $_SESSION[$fieldName];
+        }
+        session_write_close();
+        return null;
+    }
+
+
     public static function unsetFromSession($fieldName)
     {
         self::__init__();

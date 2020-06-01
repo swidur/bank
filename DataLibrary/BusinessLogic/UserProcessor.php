@@ -23,7 +23,7 @@ namespace DataLibrary {
                 $userToken = GUIDGenerator::getGUID();
             } while (self::getUserByToken($userToken) != UserProcessor::returnNullUser());
 
-            $rowCount = SqlDataAccess::SaveData($sql,
+            $rowCount = SqlDataAccess::saveData($sql,
                 [
                     $userToken,
                     $firstName,
@@ -39,7 +39,7 @@ namespace DataLibrary {
         {
             $sql = 'SELECT id, userToken, firstName, secondName, lastName, email, passHash, userStatus from users where email = ?';
 
-            $result = SqlDataAccess::LoadData($sql, [$email]);
+            $result = SqlDataAccess::loadData($sql, [$email]);
             if (!$result) {
                 return self::returnNullUser();
             } else {
@@ -60,7 +60,7 @@ namespace DataLibrary {
         {
             $sql = 'SELECT id, userToken, firstName, secondName, lastName, email, passHash, userStatus from users where id = ?';
 
-            $result = SqlDataAccess::LoadData($sql, [$id]);
+            $result = SqlDataAccess::loadData($sql, [$id]);
             if (!$result) {
                 return self::returnNullUser();
             } else {
@@ -81,7 +81,7 @@ namespace DataLibrary {
         {
             $sql = 'SELECT id, userToken, firstName, secondName, lastName, email, passHash, userStatus from users where userToken = ?';
 
-            $result = SqlDataAccess::LoadData($sql, [$token]);
+            $result = SqlDataAccess::loadData($sql, [$token]);
             if (!$result) {
                 return self::returnNullUser();
             } else {
@@ -101,51 +101,25 @@ namespace DataLibrary {
         public static function updateUserStatus($newStatus, $userId)
         {
             $sql = 'UPDATE users set userStatus = ? where id = ?';
-            SqlDataAccess::SaveData($sql, [$newStatus, $userId]);
+            SqlDataAccess::saveData($sql, [$newStatus, $userId]);
         }
 
         public static function updateUserPassword($newPassword, $userId)
         {
             $sql = 'UPDATE users set passHash = ? where id = ?';
-            SqlDataAccess::SaveData($sql, [$newPassword, $userId]);
+            SqlDataAccess::saveData($sql, [$newPassword, $userId]);
         }
 
         public static function updateUserDetails($userId, \UserInterface\UserModel $userModel)
         {
             $sql = 'UPDATE users set PESEL = ?, phoneNumber = ?, birthDate = ?, sex = ? where id = ?';
-            return SqlDataAccess::SaveData($sql, [
+            return SqlDataAccess::saveData($sql, [
                 $userModel->getPESEL(),
                 $userModel->getPhoneNumber(),
                 $userModel->getBirthDate(),
                 $userModel->getSex(),
                 $userId]);
 
-        }
-
-        public static function getUsers()
-        {
-            $sql = 'SELECT id, userToken, firstName, secondName, lastName, email,  userStatus from users';
-
-            $users = [];
-
-            $result = SqlDataAccess::LoadData($sql, [], 1);
-            if (!$result) {
-                return array(self::returnNullUser());
-            } else {
-                foreach ($result as $data) {
-                    $user = new UserModel();
-                    $user->setUserId($data['id']);
-                    $user->setUserToken($data['userToken']);
-                    $user->setFirstName($data['firstName']);
-                    $user->setSecondName($data['secondName']);
-                    $user->setLastName($data['lastName']);
-                    $user->setEmailAddress($data['email']);
-                    $user->setUserStatus($data['userStatus']);
-
-                    array_push($users, $user);
-                }
-                Helpers::addToSession('users', $users);
-            }
         }
 
     }

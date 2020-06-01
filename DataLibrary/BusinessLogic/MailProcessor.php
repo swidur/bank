@@ -3,6 +3,8 @@
 
 namespace DataLibrary;
 
+use Exception;
+
 ini_set('display_startup_errors', 1);
 ini_set('display_errors', 1);
 error_reporting(-1);
@@ -61,7 +63,7 @@ class MailProcessor
         try {
             mail($mailModel->getRecipientAddress(), $mailModel->getSubject(), $mailModel->getMessage(), $mailModel->getHeader());
             return 1;
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return 0;
         }
     }
@@ -79,7 +81,7 @@ class MailProcessor
 
         $sql = "SELECT id, recipientId, recipientAddress, sendDate, verifCode, isCodeUsed, notifType, header, subject
 from notifications where recipientId = ? and notifType = ? and messageType = 'M'  and isCodeUsed = 'N' and isSent= 'Y' order by sendDate desc limit 1";
-        $result = SqlDataAccess::LoadData($sql, [$userId, $notifType]);
+        $result = SqlDataAccess::loadData($sql, [$userId, $notifType]);
 
         if (!$result) {
             return self::returnNullMail();
@@ -103,7 +105,7 @@ from notifications where recipientId = ? and notifType = ? and messageType = 'M'
     public static function updateCodeStatus($newStatus, $notifId)
     {
         $sql = 'UPDATE notifications set isCodeUsed = ? where id = ?';
-        SqlDataAccess::SaveData($sql, [$newStatus, $notifId]);
+        SqlDataAccess::saveData($sql, [$newStatus, $notifId]);
     }
 }
 

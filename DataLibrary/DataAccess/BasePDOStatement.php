@@ -1,7 +1,7 @@
 <?php
 
 ///\brief Class that extends PDOStatement to add exception handling
-class MyPDOStatement extends PDOStatement
+class BasePDOStatement extends PDOStatement
 {
     protected $_debugValues = null;
     protected $_ValuePos = 0;

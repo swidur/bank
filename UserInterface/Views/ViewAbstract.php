@@ -5,7 +5,6 @@ namespace UserInterface;
 include_once 'UserInterface/Views/Include/Helpers/HtmlHelper.php';
 
 use DataLibrary\Helpers;
-use HtmlHelper as Html;
 
 abstract class ViewAbstract
 {
@@ -13,9 +12,9 @@ abstract class ViewAbstract
     protected $isUserLoggedIn;
     protected $pagePath;
 
-    function __construct($model = null)
+    function __construct($modelsArr = null)
     {
-        $this->model = $model;
+        $this->model = $modelsArr;
         $this->isUserLoggedIn = Helpers::isUserLoggedIn();
         if (session_status() == PHP_SESSION_NONE) {
             session_start();

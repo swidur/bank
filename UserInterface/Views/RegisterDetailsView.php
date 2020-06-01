@@ -6,20 +6,17 @@ namespace UserInterface {
     include_once 'UserInterface/Views/Include/Helpers/HtmlHelper.php';
     include_once 'UserInterface/Views/ViewAbstract.php';
 
-    use DataLibrary\Helpers;
-    use HtmlHelper as Html;
-
     class RegisterDetailsView extends ViewAbstract
     {
 
         protected $addressModel;
         protected $idDocumentModel;
 
-        public function __construct($model, $addressModel, $idDocumentModel)
+        public function __construct($modelsArr, $addressModelsArr, $idDocumentModelsArr)
         {
-            parent::__construct($model);
-            $this->addressModel = $addressModel;
-            $this->idDocumentModel = $idDocumentModel;
+            parent::__construct($modelsArr);
+            $this->addressModel = $addressModelsArr;
+            $this->idDocumentModel = $idDocumentModelsArr;
         }
 
         public function echoBody()

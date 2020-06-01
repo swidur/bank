@@ -9,7 +9,7 @@ abstract class ControllerAbstract
     protected $view;
     protected $model;
 
-    function __construct(ViewAbstract $view, UserModel $model)
+    function __construct(ViewAbstract $view, $model)
     {
         $this->view = $view;
         $this->model = $model;

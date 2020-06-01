@@ -13,7 +13,7 @@ class AddressProcessor
         $sql = 'INSERT INTO addresses (userId, countryName, areaCode, cityName, streetName, houseNumber, flatNumber)
                                 values(?,?,?,?,?,?,?)';
 
-        return SqlDataAccess::SaveData($sql, [
+        return SqlDataAccess::saveData($sql, [
             $userId,
             $addressModel->getCountryName(),
             $addressModel->getAreaCode(),

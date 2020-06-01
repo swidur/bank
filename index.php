@@ -1,7 +1,6 @@
 <?php
 
 use DataLibrary\Helpers;
-use DataLibrary\UserProcessor;
 
 set_include_path($_SERVER["DOCUMENT_ROOT"] . '/gr4/');
 
@@ -21,104 +20,103 @@ $uri = strtolower(parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH));
 $isLoggedIn = Helpers::isUserLoggedIn();
 
 
-switch ($isLoggedIn) {
+if ($isLoggedIn) {
 //  Actions of logged IN user:
-    case true:
-        switch ($uri) {
-            case '/gr4/dashboard':
-                dashboard();
-                break;
-            case '/gr4/dashboard/foreigntransfer':
-                transfers('foreign');
-                break;
-            case '/gr4/dashboard/selftransfer':
-                transfers('self');
-                break;
-            case '/gr4/dashboard/history':
-                history();
-                break;
-            case '/gr4/logout':
-                logout('normal');
-                break;
-            case '/gr4/inactivity':
-                logout('inactivity');
-                break;
-            case '/gr4/renewsession':
-                $_SESSION['timeout'] = time();
-                break;
-            case '/gr4/getusers': //DEV usunąć!
-                UserProcessor::getUsers();
-                break;
+    switch ($uri) {
+        case '/gr4/dashboard':
+            dashboard();
+            break;
+        case '/gr4/dashboard/foreigntransfer':
+            transfers('foreign');
+            break;
+        case '/gr4/dashboard/selftransfer':
+            transfers('self');
+            break;
+        case '/gr4/dashboard/history':
+            history();
+            break;
+        case '/gr4/dashboard/products':
+            products('all');
+            break;
+        case '/gr4/dashboard/products/savings':
+            products('savings');
+            break;
+        case '/gr4/dashboard/products/cards':
+            products('cards');
+            break;
+        case '/gr4/dashboard/products/loans':
+            products('loans');
+            break;
+        case '/gr4/logout':
+            logout('normal');
+            break;
+        case '/gr4/inactivity':
+            logout('inactivity');
+            break;
+        case '/gr4/renewsession':
+            $_SESSION['timeout'] = time();
+            break;
+        default:
+            Helpers::redirect('/gr4/dashboard');
 
-            default:
-                Helpers::redirect('/gr4/dashboard');
-
-        }
-        break; //case true break
-
-//  Actions of logged OUT user:
-    case false:
-        switch ($uri) {
-            case '/gr4':
-            case '/gr4/':
-            case '/gr4/home':
-            case '/gr4/index':
-                goHome();
-                break;
-            case '/gr4/login':
-                login();
-                break;
-            case '/gr4/register':
-                register();
-                break;
-            case '/gr4/registerdetails':
-                registerDetails();
-                break;
-            case '/gr4/forgotpassword':
-                forgotPassword();
-                break;
-            case '/gr4/verify':
-                verifyEmail();
-                break;
-            case '/gr4/changepassword':
-                changepassword();
-                break;
-            case '/gr4/redirect/passwordchange':
-                redirect('passwordChange');
-                break;
-            case '/gr4/redirect/registered':
-                redirect('registered');
-                break;
-            case '/gr4/redirect/registereddetails':
-                redirect('registereddetails');
-                break;
-            case '/gr4/redirect/passwordreset':
-                redirect('passwordreset');
-                break;
-            case '/gr4/redirect/verification':
-                redirect('verification');
-                break;
-            case '/gr4/redirect/inactivitylogout':
-                redirect('inactivitylogout');
-                break;
-            case '/gr4/redirect/loggedout':
-                redirect('loggedout');
-                break;
-            case '/gr4/contact':
-                staticPage('contact');
-                break;
-            case '/gr4/error/404':
-                staticPage('404');
-                break;
-            default:
+    }
+} else {
+    switch ($uri) {
+        case '/gr4':
+        case '/gr4/':
+        case '/gr4/home':
+        case '/gr4/index':
+            goHome();
+            break;
+        case '/gr4/login':
+            login();
+            break;
+        case '/gr4/register':
+            register();
+            break;
+        case '/gr4/registerdetails':
+            registerDetails();
+            break;
+        case '/gr4/forgotpassword':
+            forgotPassword();
+            break;
+        case '/gr4/verify':
+            verifyEmail();
+            break;
+        case '/gr4/changepassword':
+            changepassword();
+            break;
+        case '/gr4/redirect/passwordchange':
+            redirect('passwordChange');
+            break;
+        case '/gr4/redirect/registered':
+            redirect('registered');
+            break;
+        case '/gr4/redirect/registereddetails':
+            redirect('registereddetails');
+            break;
+        case '/gr4/redirect/passwordreset':
+            redirect('passwordreset');
+            break;
+        case '/gr4/redirect/verification':
+            redirect('verification');
+            break;
+        case '/gr4/redirect/inactivitylogout':
+            redirect('inactivitylogout');
+            break;
+        case '/gr4/redirect/loggedout':
+            redirect('loggedout');
+            break;
+        case '/gr4/contact':
+            staticPage('contact');
+            break;
+        case '/gr4/error/404':
+            staticPage('404');
+            break;
+        default:
 //               header("Location:  /gr4/");
-                Helpers::redirect('/gr4/');
-        }
-
-        break; //case false break
-
-    default:
-        staticPage('404');
+            Helpers::redirect('/gr4/');
+    }
 }
 //
 //if ('/gr4/index' === $uri) {

@@ -13,7 +13,7 @@ class IdDocumentProcessor
         $sql = 'INSERT INTO documents (userId, docType, docNumber, docSeries, issuerName, validDate)
                                values (?,?,?,?,?,?)';
 
-        return SqlDataAccess::SaveData($sql, [
+        return SqlDataAccess::saveData($sql, [
             $userId,
             $documentModel->getDocType(),
             $documentModel->getDocNumber(),

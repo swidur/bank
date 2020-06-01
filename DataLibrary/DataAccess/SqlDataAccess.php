@@ -13,31 +13,43 @@ namespace DataLibrary {
 
     class SqlDataAccess
     {
-        private static $databaseAuthPath;
+        private static $host;
+        private static $db;
+        private static $port;
+        private static $user;
+        private static $password;
+        private static $charset;
+        private static $options;
+
         private static $_didInit = false;
 
-
-        public static function _innit_()
+        public static function _init_()
         {
             if (!self::$_didInit) {
-                self::$databaseAuthPath = $_SERVER['SERVER_NAME'] == 'wikomp.edu.pl' ? 'DataLibrary/DataAccess/DatabaseAuth.php' : 'DataLibrary/DataAccess/DatabaseAuthLocal.php';
-                require self::$databaseAuthPath;
+                $databaseAuthPath = $_SERVER['SERVER_NAME'] == 'wikomp.edu.pl' ? 'DataLibrary/DataAccess/DatabaseAuth.php' : 'DataLibrary/DataAccess/DatabaseAuthLocal.php';
                 self::$_didInit = true;
+                include $databaseAuthPath;
+                self::$host = $_host;
+                self::$db = $_db;
+                self::$port = $_port;
+                self::$user = $_user;
+                self::$password = $_password;
+                self::$charset = $_charset;
+                self::$options = $_options;
             }
         }
 
         private static function getConnectionString()
         {
-            self::_innit_();
-            require self::$databaseAuthPath;
-            return "mysql:host=$host;dbname=$db;charset=$charset;port=$port";
+            self::_init_();
+            return "mysql:host=" . self::$host . ";dbname=" . self::$db . ";charset=" . self::$charset . ";port=" . self::$port;
         }
 
-        public static function LoadData($sql, $bind, $multipleRows = 0)
+        public static function loadData($sql, $bind, $multipleRows = 0)
         {
-            self::_innit_();
+            self::_init_();
             try {
-                $pdo = new PDO(self::getConnectionString(), $user, $pass, $options);
+                $pdo = new PDO(self::getConnectionString(), self::$user, self::$password, self::$options);
             } catch (Exception $e) {
                 echo 'Caught sqlDataAccess exception: ' . $e->getTraceAsString() . "\r" . $e->getMessage();
                 die();
@@ -61,11 +73,10 @@ namespace DataLibrary {
             }
         }
 
-        public static function SaveData($sql, $bind)
+        public static function saveData($sql, $bind)
         {
-            self::_innit_();
             try {
-                $pdo = new PDO(self::getConnectionString(), $user, $pass, $options);
+                $pdo = new PDO(self::getConnectionString(), self::$user, self::$password, self::$options);
             } catch (Exception $e) {
                 echo 'Caught sqlDataAccess exception: ' . $e->getTraceAsString() . "\r" . $e->getMessage() . "\r";
                 die();

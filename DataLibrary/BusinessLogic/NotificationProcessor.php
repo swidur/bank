@@ -2,6 +2,8 @@
 
 
 namespace DataLibrary;
+use Exception;
+
 ini_set('display_startup_errors', 1);
 ini_set('display_errors', 1);
 error_reporting(-1);
@@ -36,12 +38,12 @@ class NotificationProcessor
             if (MailProcessor::sendMail($mail)) {
                 $mail->setIsSent('Y');
             }
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             echo 'Exception while sending mail: ' . $e->getMessage();
         } finally {
             try {
                 self::storeMail($mail);
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 echo 'Exception while email storing in database: ' . $e->getMessage();
             }
         }
@@ -68,12 +70,12 @@ class NotificationProcessor
             if (MailProcessor::sendMail($mail)) {
                 $mail->setIsSent('Y');
             }
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             echo 'Exception while sending mail: ' . $e->getMessage();
         } finally {
             try {
                 self::storeMail($mail);
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 echo 'Exception while email storing in database: ' . $e->getMessage();
             }
         }
@@ -85,7 +87,7 @@ class NotificationProcessor
                                         isCodeUsed, notifType, messageType, isSent)
                 values (?,?,?,?,?,?,?,?,?,?,?)';
 
-        SqlDataAccess::SaveData($sql,
+        SqlDataAccess::saveData($sql,
             [$mailModel->getRecipientId(),
                 $mailModel->getRecipientAddress(),
                 $mailModel->getSubject(),

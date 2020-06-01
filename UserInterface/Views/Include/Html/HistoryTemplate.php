@@ -31,7 +31,7 @@
 <!--Page Wrapper -->
 <div id="wrapper">
 
-    <?php require_once "Components/Sidebar.php" ?>
+    <?php require_once "Components/UserSidebar.php" ?>
 
 
     <!-- Content Wrapper -->

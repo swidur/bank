@@ -9,11 +9,11 @@ class HistoryView extends ViewAbstract
     private $userModel;
     private $accountModel;
 
-    public function __construct($userModel, $accountModel)
+    public function __construct($userModelsArr, $accountModelsArr)
     {
-        parent::__construct($userModel);
-        $this->$userModel = $userModel;
-        $this->$accountModel = $accountModel;
+        parent::__construct($userModelsArr);
+        $this->$userModelsArr = $userModelsArr;
+        $this->$accountModelsArr = $accountModelsArr;
     }
 
     public function echoBody()
